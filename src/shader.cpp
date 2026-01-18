@@ -58,7 +58,7 @@ bool Shader::LoadShaderFile(string from, string &into){
     ifstream file;
     string temp;
 
-    cout << "loading shader text file from " << from << "\n\n";
+    cout << "loading shader text file from " << from << "\n";
 
     file.open(from.c_str());
     if (!file.is_open()){
@@ -70,7 +70,7 @@ bool Shader::LoadShaderFile(string from, string &into){
         into += temp + "\n";
     }
     file.close();
-    cout << into << "\n\nloaded shader text\n\n";
+    // cout << into << "\n\nloaded shader text\n\n";
     return true;
 }
 

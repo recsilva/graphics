@@ -7,3 +7,4 @@ CPPFILES = src/*.cpp glad/glad.c
 
 all:
 	$(CC) $(CFLAGS) $(CPPFILES) -o program $(LIBS)
+	./program

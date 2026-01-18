@@ -1,7 +1,7 @@
 #version 330 core
 
 in Vertex{
-    vec4 color;
+    smooth vec4 color;
 } IN;
 
 out vec4 fragColor;

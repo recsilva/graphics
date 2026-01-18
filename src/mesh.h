@@ -17,6 +17,7 @@ class Mesh{
 
         void draw();
         static Mesh* generate_triangle();
+        static Mesh* generate_quad();
         
     protected:
         void buffer_data();

@@ -4,7 +4,7 @@ in vec3 position;
 in vec4 color;
 
 out Vertex{
-    vec4 color;
+    smooth vec4 color;
 } OUT;
 
 void main() { 
