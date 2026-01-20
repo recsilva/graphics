@@ -8,12 +8,16 @@
 #include "Matrix4.h"
 #include "mesh.h"
 #include "shader.h"
+#include "camera.h"
 
 class Renderer {
 public:
-    Renderer(GLFWwindow *window, int width, int height);
+    Renderer(GLFWwindow *window, Camera *camera, int width, int height);
     virtual ~Renderer();
     virtual void RenderScene();
+    virtual void UpdateScene();
+
+    void UpdateShaderMatrices();
 
     void SwitchToPerspective();
     void SwitchToOrthographic();
@@ -32,9 +36,11 @@ protected:
     Matrix4 modelMatrix;
     Matrix4 projMatrix;
     Matrix4 viewMatrix;
+    Matrix4 textureMatrix;
 private:
     Shader* currentShader;
     GLFWwindow* window;
+    Camera* camera;
 
     float fov = 45.0f;
 

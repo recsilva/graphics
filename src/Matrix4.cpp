@@ -1,5 +1,6 @@
 #include "Matrix4.h"
 
+//default constructor makes identity matrix NOWAYING
 Matrix4::Matrix4(void)	{
 	ToIdentity();
 }

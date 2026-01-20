@@ -1,7 +1,7 @@
 #include "renderer.h"
 
-Renderer::Renderer(GLFWwindow* window, int width, int height) 
-    : window(window), width(width), height(height)
+Renderer::Renderer(GLFWwindow* window, Camera* camera, int width, int height) 
+    : window(window), camera(camera), width(width), height(height)
 {
     mesh = Mesh::generate_quad();
 
@@ -16,6 +16,7 @@ Renderer::Renderer(GLFWwindow* window, int width, int height)
     SwitchToOrthographic();
 }
 Renderer::~Renderer(){
+    delete camera;
     delete mesh;
 }
 
@@ -25,12 +26,7 @@ void Renderer::RenderScene(){
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(currentShader->GetProgram());
 
-    glUniformMatrix4fv(
-        glGetUniformLocation(currentShader->GetProgram(), "projMatrix"),
-        1, false, (float*)&projMatrix);
-    glUniformMatrix4fv(
-        glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"),
-        1, false, (float*)&viewMatrix);
+    UpdateShaderMatrices();
     
     for(int i = 0; i < 3; i++){
         Vector3 tempPos = position;
@@ -40,7 +36,7 @@ void Renderer::RenderScene(){
 
         modelMatrix =   Matrix4::Translation(tempPos) *
                         Matrix4::Rotation(rotation, Vector3(0,1,0)) *
-                        Matrix4::Scale(Vector3(scale,scale,scale));
+                        Matrix4::Scale(Vector3(100,100,100));
 
         glUniformMatrix4fv(glGetUniformLocation(
             currentShader->GetProgram(), "modelMatrix"),
@@ -52,6 +48,28 @@ void Renderer::RenderScene(){
 
     glfwSwapBuffers(window);
     glfwPollEvents();
+}
+
+void Renderer::UpdateScene(){
+    // camera->UpdateCameraRotation();
+    viewMatrix = camera->BuildViewMatrix();
+}
+
+void Renderer::UpdateShaderMatrices(){
+    if (currentShader){
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),
+            1, false, (float*)&modelMatrix);
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"),
+            1, false, (float*)&viewMatrix);
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "projMatrix"),
+            1, false, (float*)&projMatrix);
+        glUniformMatrix4fv(
+            glGetUniformLocation(currentShader->GetProgram(), "textureMatrix"),
+            1, false, (float*)&textureMatrix);
+    }
 }
 
 void Renderer::SwitchToPerspective(){
